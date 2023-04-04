@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - DeadZone
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Ground
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: BG
+    uniqueID: 1606907665
+    locked: 0
+  - name: Ground
+    uniqueID: 1356911827
+    locked: 0
+  - name: ForeGround
+    uniqueID: 3917812819
+    locked: 0
+  - name: SoulCoin
+    uniqueID: 2606696117
+    locked: 0
+  - name: Character
+    uniqueID: 4278196951
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
