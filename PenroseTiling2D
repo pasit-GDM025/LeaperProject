@@ -1,0 +1,94 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PenroseTiling2D : MonoBehaviour
+{
+    public int levels = 4;
+    public float thickness = 0.1f;
+    public float scale = 1f;
+
+    private List<Vector3> vertices;
+    private List<int> triangles;
+    private Mesh mesh;
+
+    void Start()
+    {
+        mesh = new Mesh();
+        GetComponent<MeshFilter>().mesh = mesh;
+
+        vertices = new List<Vector3>();
+        triangles = new List<int>();
+
+        Generate(levels);
+
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
+        mesh.RecalculateNormals();
+    }
+
+    void Generate(int levels)
+    {
+        if (levels <= 0) return;
+
+        // Define the Penrose tiles
+        Vector2 a = new Vector2(0, 0);
+        Vector2 b = new Vector2(1, 0);
+        Vector2 c = new Vector2(1 + Mathf.Sqrt(3), 1) / 2f;
+        Vector2 d = new Vector2(Mathf.Sqrt(3) / 2f, 0.5f);
+        Vector2 e = new Vector2(1 + Mathf.Sqrt(3) / 2f, 0.5f);
+
+        // Apply scaling
+        a *= scale;
+        b *= scale;
+        c *= scale;
+        d *= scale;
+        e *= scale;
+
+        // Add the initial rhombus
+        AddRhombus(a, b, d, e);
+        AddRhombus(b, c, d, e);
+
+        // Recursively add subdivisions
+        for (int i = 0; i < levels - 1; i++)
+        {
+            int vertexCount = vertices.Count;
+            for (int j = 0; j < vertexCount; j += 3)
+            {
+                Vector3 v1 = vertices[j];
+                Vector3 v2 = vertices[j + 1];
+                Vector3 v3 = vertices[j + 2];
+
+                Vector3 ab = (v1 + v2) / 2f;
+                Vector3 ae = (v1 + v3) / 2f;
+                Vector3 bd = (v2 + v3) / 2f;
+                Vector3 de = (ae + bd) / 2f;
+                Vector3 ed = (de - ae) + ab;
+
+                AddRhombus(v1, ab, ae, ed);
+                AddRhombus(ab, v2, bd, ed);
+                AddRhombus(ae, ed, de, v3);
+                AddRhombus(ed, bd, v3, de);
+            }
+        }
+    }
+
+    void AddRhombus(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+    {
+        AddTriangle(a, b, d);
+        AddTriangle(b, c, d);
+        AddTriangle(a, c, d);
+        AddTriangle(a, b, c);
+    }
+
+    void AddTriangle(Vector2 a, Vector2 b, Vector2 c)
+    {
+        int index = vertices.Count;
+        vertices.Add(new Vector3(a.x, a.y, 0f));
+        vertices.Add(new Vector3(b.x, b.y, 0f));
+        vertices.Add(new Vector3(c.x, c.y, 0f));
+        triangles.Add(index);
+        triangles.Add(index + 1);
+        triangles.Add(index + 2);
+    }
+}
